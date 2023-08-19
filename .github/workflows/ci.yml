@@ -22,11 +22,17 @@ jobs:
           cd inq-app
           echo "Installing dependencies..."
           npm install
-          
+
+      - name: Run check format code
+        run: |
+          cd inq-app
           echo "Running format..."
           npm run format:check
-          
-          echo "Running test..."
-          npm test -- --coverage
+
+      - name: Run Coverage test
+        run: |
+          cd inq-app
+          echo "Running coverage..."
+          npm run coverage
         env:
           CI: true
