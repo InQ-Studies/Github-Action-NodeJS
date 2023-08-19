@@ -33,6 +33,6 @@ jobs:
         run: |
           cd inq-app
           echo "Running coverage..."
-          npm run coverage
+          npm test -- --coverage
         env:
           CI: true
