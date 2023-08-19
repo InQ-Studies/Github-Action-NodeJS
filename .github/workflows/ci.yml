@@ -72,8 +72,8 @@ jobs:
         run: |
           cd ${{ env.SOURCE_DIR }}
           echo "Zipping build artifact..."
-          zip -r build.zip ${{ env.SOURCE_DIR }}/build
-          zip -r coverage.zip ${{ env.SOURCE_DIR }}/coverage
+          zip -r build.zip ./build
+          zip -r coverage.zip ./coverage
       - name: Create a release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         #        uses: actions/create-release@v1
