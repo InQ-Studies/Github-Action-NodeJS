@@ -1,9 +1,9 @@
 name: CI
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]
   push:
-    branches: [ develop ]
+    branches: [ develop, main ]
 env:
   SOURCE_DIR: inq-app
 jobs:
@@ -66,6 +66,21 @@ jobs:
         with:
           name: build
           path: ${{ env.SOURCE_DIR }}/build
+
+      - name: Create a release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+#        uses: actions/create-release@v1
+        run: |
+          cd ${{ env.SOURCE_DIR }}
+          echo "Creating a release..."
+          npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ github.ref }}
+#          release_name: Release ${{ github.ref }}
+#          draft: false
+#          prerelease: false
 
       - name: Deploy to Staging
         if: github.event_name == 'push'
