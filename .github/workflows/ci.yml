@@ -1,0 +1,53 @@
+name: CI
+on:
+  pull_request:
+    branches: [ develop ]
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: |
+          cd inq-app
+          echo "Installing dependencies..."
+          npm install
+
+      - name: Run check format code
+        run: |
+          cd inq-app
+          echo "Running format..."
+          npm run format:check
+
+      - name: Run Coverage test
+        run: |
+          cd inq-app
+          echo "Running coverage..."
+          npm test -- --coverage
+        env:
+          CI: true
+      - name: Build Project
+        if: github.event_name == 'push'
+        run: |
+          cd inq-app
+          echo "Building project..."
+          npm run build
+      - name: Deploy to Staging
+        if: github.event_name == 'push'
+        run: |
+          cd inq-app
+          echo "Deploying to staging..."
+          npx surge --project ./build --domain  unkempt-idea.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
