@@ -2,8 +2,8 @@ name: CI
 on:
   pull_request:
     branches: [ develop ]
-    paths:
-      - 'inq-app/**'
+  push:
+    branches: [ develop ]
 
 jobs:
   build:
@@ -36,3 +36,18 @@ jobs:
           npm test -- --coverage
         env:
           CI: true
+      - name: Build Project
+        if: github.event_name == 'push'
+        run: |
+          cd inq-app
+          echo "Building project..."
+          npm run build
+      - name: Deploy to Staging
+        if: github.event_name == 'push'
+        run: |
+          cd inq-app
+          echo "Deploying to staging..."
+          npx surge --project ./build --domain  unkempt-idea.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
