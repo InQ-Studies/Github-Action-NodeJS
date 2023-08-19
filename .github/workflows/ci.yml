@@ -1,10 +1,11 @@
 name: CI
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]
   push:
-    branches: [ develop ]
-
+    branches: [ develop, main ]
+env:
+  SOURCE_DIR: inq-app
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,35 +18,81 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Install dependencies
         run: |
-          cd inq-app
+          cd ${{ env.SOURCE_DIR }}
           echo "Installing dependencies..."
-          npm install
+          npm ci
 
       - name: Run check format code
         run: |
-          cd inq-app
+          cd ${{ env.SOURCE_DIR }}
           echo "Running format..."
           npm run format:check
 
       - name: Run Coverage test
         run: |
-          cd inq-app
+          cd ${{ env.SOURCE_DIR }}
           echo "Running coverage..."
           npm test -- --coverage
         env:
           CI: true
+
+      - name: Upload code coverage
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: ${{ env.SOURCE_DIR }}/coverage
+
       - name: Build Project
         if: github.event_name == 'push'
         run: |
-          cd inq-app
+          cd ${{ env.SOURCE_DIR }}
           echo "Building project..."
           npm run build
+
+
+      - name: Upload build artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ${{ env.SOURCE_DIR }}/build
+
+      - name: Zip build artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd ${{ env.SOURCE_DIR }}
+          echo "Zipping build artifact..."
+          zip -r build.zip ${{ env.SOURCE_DIR }}/build
+          zip -r coverage.zip ${{ env.SOURCE_DIR }}/coverage
+      - name: Create a release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        #        uses: actions/create-release@v1
+        run: |
+          cd ${{ env.SOURCE_DIR }}
+          echo "Creating a release..."
+          npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #        with:
+      #          tag_name: ${{ github.ref }}
+      #          release_name: Release ${{ github.ref }}
+      #          draft: false
+      #          prerelease: false
+
       - name: Deploy to Staging
         if: github.event_name == 'push'
         run: |
-          cd inq-app
+          cd ${{ env.SOURCE_DIR }}
           echo "Deploying to staging..."
           npx surge --project ./build --domain  unkempt-idea.surge.sh
         env:
