@@ -67,20 +67,27 @@ jobs:
           name: build
           path: ${{ env.SOURCE_DIR }}/build
 
+      - name: Zip build artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd ${{ env.SOURCE_DIR }}
+          echo "Zipping build artifact..."
+          zip -r build.zip ${{ env.SOURCE_DIR }}/build
+          zip -r coverage.zip ${{ env.SOURCE_DIR }}/coverage
       - name: Create a release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-#        uses: actions/create-release@v1
+        #        uses: actions/create-release@v1
         run: |
           cd ${{ env.SOURCE_DIR }}
           echo "Creating a release..."
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ github.ref }}
-#          release_name: Release ${{ github.ref }}
-#          draft: false
-#          prerelease: false
+      #        with:
+      #          tag_name: ${{ github.ref }}
+      #          release_name: Release ${{ github.ref }}
+      #          draft: false
+      #          prerelease: false
 
       - name: Deploy to Staging
         if: github.event_name == 'push'
