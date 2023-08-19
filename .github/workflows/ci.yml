@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
+      - run: cd inq-app
       - run: npm install
       - run: npm run format:check
       - run: npm test -- --coverage
