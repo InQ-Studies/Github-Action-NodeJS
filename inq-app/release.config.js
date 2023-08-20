@@ -1,6 +1,6 @@
 module.exports = {
     branches: "main",
-    repositoryUrl: "https://github.com/ThaiQui/React-CICD",
+    repositoryUrl: "https://github.com/ThaiQui/Github-Action-Node",
     plugins: [
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",

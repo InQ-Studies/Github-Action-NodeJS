@@ -1,9 +1,9 @@
 name: CI
 on:
   pull_request:
-    branches: [ develop, main ]
+    branches: [develop, main]
   push:
-    branches: [ develop, main ]
+    branches: [develop, main]
 env:
   SOURCE_DIR: inq-app
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.x ]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -59,7 +59,6 @@ jobs:
           echo "Building project..."
           npm run build
 
-
       - name: Upload build artifact
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
@@ -71,7 +70,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cd ${{ env.SOURCE_DIR }}
-          
+
           echo "Zipping build artifact..."
           zip -r build.zip ./build
 
