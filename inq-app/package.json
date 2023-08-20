@@ -48,7 +48,7 @@
     "eject": "react-scripts eject",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,yml,yaml,json,.css,.scss }\"",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,yml,yaml,json,.css,.scss}\"",
-    "commitmsg": "commitlint -x @commitlint/config-conventional -E GIT_PARAMS"
+    "commitmsg": "commitlint -E HUSKY_GIT_PARAMS"
   },
   "eslintConfig": {
     "extends": [
@@ -74,5 +74,11 @@
     "husky": "^8.0.3",
     "prettier": "3.0.2",
     "semantic-release": "^21.0.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format:check",
+      "commit-msg": "npm run commitmsg"
+    }
   }
 }
