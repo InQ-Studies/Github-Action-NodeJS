@@ -81,14 +81,14 @@ jobs:
 
           echo "Zipping coverage artifact..."
           zip -r coverage.zip ./coverage
-      - name: Create a release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          cd ${{ env.SOURCE_DIR }}
-          echo "Creating a release..."
-          npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      # - name: Create a release
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   run: |
+      #     cd ${{ env.SOURCE_DIR }}
+      #     echo "Creating a release..."
+      #     npx semantic-release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Deploy to Staging
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
