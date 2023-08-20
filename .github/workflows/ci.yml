@@ -9,6 +9,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
     strategy:
       matrix:
         node-version: [18.x]
@@ -88,11 +92,22 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Staging
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: |
           cd ${{ env.SOURCE_DIR }}
           echo "Deploying to staging..."
           npx surge --project ./build --domain  unkempt-idea.surge.sh
+
+      - name: Deploy to Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd ${{ env.SOURCE_DIR }}
+          echo "Deploying to staging..."
+          npx surge --project ./build --domain  unkempt-idea.surge.sh
+      - name: Upload Coveage Report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx codecov
         env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+
