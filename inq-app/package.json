@@ -3,17 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "release": {
-    "branches": ["main"],
+    "branches": [
+      "main"
+    ],
     "repositoryUrl": "https://github.com/ThaiQui/Github-Action-Node",
     "plugins": [
-        "@semantic-release/commit-analyzer",
-        "@semantic-release/release-notes-generator",
-        ["@semantic-release/github", {
-            "assets": [
-                {"path": "build.zip", "label": "Build"},
-                {"path": "coverage.zip", "label": "Coverage"}
-            ]
-        }]
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "build.zip",
+              "label": "Build"
+            },
+            {
+              "path": "coverage.zip",
+              "label": "Coverage"
+            }
+          ]
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -36,7 +47,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,yml,yaml,json,.css,.scss }\"",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,yml,yaml,json,.css,.scss}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,yml,yaml,json,.css,.scss}\"",
+    "commitmsg": "commitlint -x @commitlint/config-conventional -E GIT_PARAMS"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +69,9 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "husky": "^8.0.3",
     "prettier": "3.0.2",
     "semantic-release": "^21.0.7"
   }
