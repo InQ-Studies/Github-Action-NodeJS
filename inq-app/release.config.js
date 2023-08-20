@@ -1,5 +1,5 @@
 module.exports = {
-    branches: "main",
+    branches: ["main", "feature/workflow"],
     repositoryUrl: "https://github.com/ThaiQui/Github-Action-Node",
     plugins: [
         "@semantic-release/commit-analyzer",
