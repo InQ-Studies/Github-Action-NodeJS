@@ -90,18 +90,19 @@ jobs:
         id: semantic
         uses: cycjimmy/semantic-release-action@v3
         with:
+          dry_run: true
           semantic_version: 21.0.9
           branch: main
           working_directory: ./${{ env.SOURCE_DIR }}
-          extra_plugins: |
-            "@semantic-release/commit-analyzer",
-            "@semantic-release/release-notes-generator",
-            ["@semantic-release/github", {
-                assets: [
-                    {path: "build.zip", label: "Build"},
-                    {path: "coverage.zip", label: "Coverage"}
-                ]
-            }],
+          # extra_plugins: |
+          #   "@semantic-release/commit-analyzer",
+          #   "@semantic-release/release-notes-generator",
+          #   ["@semantic-release/github", {
+          #       assets: [
+          #           {path: "build.zip", label: "Build"},
+          #           {path: "coverage.zip", label: "Coverage"}
+          #       ]
+          #   }],
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
