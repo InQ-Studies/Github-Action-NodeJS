@@ -1,0 +1,17 @@
+name: Hello World
+author: Thai Qui
+description: "Greet someone with Hello World"
+inputs:
+  who-to-greet:
+    description: "Who to greet"
+    required: true
+    default: "World"
+
+outputs:
+  time: 
+    description: "The time we greeted you"
+    value: ${{ steps.hello.outputs.time }}
+
+runs:
+  using: "node12"
+  main: "index.js"
