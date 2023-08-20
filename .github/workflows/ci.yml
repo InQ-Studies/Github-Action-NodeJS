@@ -71,8 +71,11 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cd ${{ env.SOURCE_DIR }}
+          
           echo "Zipping build artifact..."
           zip -r build.zip ./build
+
+          echo "Zipping coverage artifact..."
           zip -r coverage.zip ./coverage
       - name: Create a release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
