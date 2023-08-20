@@ -86,6 +86,7 @@ jobs:
       #     npx semantic-release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+<<<<<<< Updated upstream
       - name: Create a release
         id: semantic
         uses: cycjimmy/semantic-release-action@v3
@@ -114,6 +115,17 @@ jobs:
           echo ${{ steps.semantic.outputs.new_release_major_version }}
           echo ${{ steps.semantic.outputs.new_release_minor_version }}
           echo ${{ steps.semantic.outputs.new_release_patch_version }}
+=======
+      # - name: Create a release
+      #   uses: cycjimmy/semantic-release-action@v3
+      #   with:
+      #     branch: main
+      #     working_directory: ./${{ env.SOURCE_DIR }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+>>>>>>> Stashed changes
 
       - name: Deploy to Staging
         if: github.event_name == 'push'
