@@ -90,21 +90,10 @@ jobs:
         with:
           branch: main
           working_directory: ./${{ env.SOURCE_DIR }}
-          extra_plugins: |
-            @semantic-release/commit-analyzer
-            @semantic-release/release-notes-generator
-            @semantic-release/changelog
-            @semantic-release/npm
-            ["@semantic-release/github", {
-            assets: [
-                {path: "build.zip", label: "Build"},
-                {path: "coverage.zip", label: "Coverage"}
-            ]
-            }],
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
+
       - name: Do something when a new release published
         if: steps.semantic.outputs.new_release_published == 'true'
         run: |
